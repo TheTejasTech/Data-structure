@@ -1,6 +1,6 @@
 import java.util.*;
 
-public class Main {
+public class GraphDSA {
     static class Edge {
         int src, dest, wt;
         Edge(int src, int dest, int wt) {
