@@ -1,81 +1,54 @@
-import java.util.LinkedList;
-import java.util.Queue;
-import java.util.ArrayList;
+import java.util.*;
 
-public class GraphDSA {
-
+public class Main {
     static class Edge {
-        int wt;
-        int src;
-        int dest;
-
-        Edge(int wt, int src, int dest) {
-            this.wt = wt;
+        int src, dest, wt;
+        Edge(int src, int dest, int wt) {
             this.src = src;
             this.dest = dest;
+            this.wt = wt;
         }
     }
 
-    public static void createG(ArrayList<Edge> graph[], int V) {
+    public static void createg(ArrayList<Edge>[] graph, int V) {
         for (int i = 0; i < graph.length; i++) {
             graph[i] = new ArrayList<Edge>();
         }
-        graph[0].add(new Edge(0, 0, 2));
-        graph[1].add(new Edge(1, 1, 0));
-        graph[1].add(new Edge(1, 1, 3));
-        graph[2].add(new Edge(2, 2, 1));
-        graph[2].add(new Edge(2, 2, 0));
-        graph[2].add(new Edge(2, 2, 3));
-        graph[3].add(new Edge(3, 3, 0));
-        graph[3].add(new Edge(3, 3, 2));
+ 
+        graph[0].add(new Edge(0, 1, 1));
+        graph[0].add(new Edge(0, 2, 1));
+
+        graph[1].add(new Edge(1, 3, 1));
+
+        graph[2].add(new Edge(2, 3, 1));
+
     }
 
-    public static void bfs(ArrayList<Edge> graph[], int V) {
-        Queue<Integer> q = new LinkedList<>();
+    public static void bfs(ArrayList<Edge>[] graph, int V) {
+        Queue<Integer> pq = new LinkedList<>();
         boolean[] vis = new boolean[V];
 
-        // Start BFS from node 0
-        q.add(0);
+        pq.add(0);      
         vis[0] = true;
 
-        while (!q.isEmpty()) {
-            int curr = q.poll();
+        while (!pq.isEmpty()) {
+            int curr = pq.poll();
             System.out.print(curr + " ");
-
             for (Edge e : graph[curr]) {
                 if (!vis[e.dest]) {
-                    q.add(e.dest);
+                    pq.add(e.dest);
                     vis[e.dest] = true;
                 }
             }
         }
     }
 
-    public static void dfs(ArrayList<Edge> graph[], boolean vis[], int curr) {
-        System.out.print(curr + " ");
-        vis[curr] = true;
-        for (Edge e : graph[curr]) {
-            if (!vis[e.dest]) {
-                dfs(graph, vis, e.dest);
-            }
-        }
-    }
+    public static void main(String[] args) {
+        int V = 4;
+        ArrayList<Edge>[] graph = new ArrayList[V];
 
-    @SuppressWarnings("unchecked")
-    public static void main(String args[]) {
-        System.out.println("Hey");
-        int V = 4; // Corrected the number of vertices to match the graph
-        ArrayList<Edge> graph[] = new ArrayList[V];
-        createG(graph, V); // Initialize the graph
-
-        boolean vis[] = new boolean[V]; // visited array for BFS and DFS
-
-        System.out.print("The BFS is: ");
+        System.out.println("The BFS traversal is:");
+        createg(graph, V);
         bfs(graph, V);
-        System.out.println();
-
-        System.out.print("The DFS is: ");
-        dfs(graph, vis, 1); // Start DFS from node 0
-        System.out.println();
     }
 }
