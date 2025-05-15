@@ -60,11 +60,11 @@ public:
 
 int main() {
     vector<pair<int, string>> students = {
-        {95, "Aditya"},
-        {90, "Vishal"},
-        {98, "Shivraj"},
-        {85, "Nikhil"},
-        {92, "Harshad"}
+        {95, "Alex"},
+        {90, "Ander"},
+        {98, "Polito"},
+        {85, "Lucrecia"},
+        {92, "Sameul"}
     };
 
     // Sort students in ascending order of grades
