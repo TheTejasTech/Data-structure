@@ -2,72 +2,73 @@
 using namespace std;
 
 #define INF INT_MAX
-#define V 4  // Number of cities (you can adjust this as per your requirement)
+#define V 4
 
-int graph[V][V] = {
-    {0, 10, 15, 20},
-    {10, 0, 35, 25},
-    {15, 35, 0, 30},
-    {20, 25, 30, 0}
-};
-
-// A utility function to find the minimum cost path using Branch and Bound
-int calculateCost(const vector<int>& path) {
-    int cost = 0;
-    for (int i = 0; i < path.size() - 1; i++) {
-        cost += graph[path[i]][path[i + 1]];
+void printMatrix(vector<vector<int>> matrix) {
+    for (auto& row : matrix) {
+        for (int val : row) {
+            if (val == INF)
+                cout << "INF\t";
+            else
+                cout << val << "\t";
+        }
+        cout << endl;
     }
-    cost += graph[path.back()][path[0]];  // Return to the starting city
+}
+
+// Function to reduce rows and columns and return the reduction cost
+int reduceMatrix(vector<vector<int>>& matrix) {
+    int cost = 0;
+
+    // Row Reduction
+    for (int i = 0; i < V; i++) {
+        int rowMin = INF;
+        for (int j = 0; j < V; j++)
+            rowMin = min(rowMin, matrix[i][j]);
+        if (rowMin != INF && rowMin > 0) {
+            cost += rowMin;
+            for (int j = 0; j < V; j++) {
+                if (matrix[i][j] != INF)
+                    matrix[i][j] -= rowMin;
+            }
+        }
+    }
+
+    // Column Reduction
+    for (int j = 0; j < V; j++) {
+        int colMin = INF;
+        for (int i = 0; i < V; i++)
+            colMin = min(colMin, matrix[i][j]);
+        if (colMin != INF && colMin > 0) {
+            cost += colMin;
+            for (int i = 0; i < V; i++) {
+                if (matrix[i][j] != INF)
+                    matrix[i][j] -= colMin;
+            }
+        }
+    }
+
     return cost;
 }
 
-// Helper function to perform Branch and Bound
-void branchBound(int currentPos, int n, vector<int>& path, vector<bool>& visited, int& min_cost, vector<int>& best_path) {
-    if (path.size() == n) {  // If all cities are visited
-        int cost = calculateCost(path);
-        if (cost < min_cost) {
-            min_cost = cost;
-            best_path = path;
-        }
-        return;
-    }
-
-    for (int nextCity = 0; nextCity < n; nextCity++) {
-        if (!visited[nextCity]) {
-            path.push_back(nextCity);
-            visited[nextCity] = true;
-            branchBound(nextCity, n, path, visited, min_cost, best_path);
-            visited[nextCity] = false;
-            path.pop_back();
-        }
-    }
-}
-
-int tsp(int graph[V][V], int n) {
-    vector<int> path;
-    vector<bool> visited(n, false);
-    int min_cost = INF;
-    
-    // Store the path for which the minimum cost is found
-    vector<int> best_path;
-    
-    // Start the Branch and Bound process from city 0
-    path.push_back(0);
-    visited[0] = true;
-    branchBound(0, n, path, visited, min_cost, best_path);
-    
-    cout << "Minimum cost: " << min_cost << endl;
-    cout << "Path: ";
-    for (int city : best_path) {
-        cout << city << " ";
-    }
-    cout << endl;
-
-    return min_cost;
-}
-
 int main() {
-    int n = V;
-    tsp(graph, n);
+    vector<vector<int>> graph = {
+        {INF, 10, 15, 20},
+        {10, INF, 35, 25},
+        {15, 35, INF, 30},
+        {20, 25, 30, INF}
+    };
+
+    cout << "🔹 Original Cost Matrix:\n";
+    printMatrix(graph);
+
+    vector<vector<int>> reduced = graph; // Clone matrix
+    int cost = reduceMatrix(reduced);
+
+    cout << "\n Reduced Cost Matrix (after row & column reduction):\n";
+    printMatrix(reduced);
+
+    cout << "\n Reduction Cost (lower bound for this node): " << cost << endl;
+
     return 0;
 }
