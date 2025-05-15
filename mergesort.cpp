@@ -1,68 +1,56 @@
 #include <iostream>
-#include <list>
+#include <vector>
 using namespace std;
 
-void merge(list<int> &arr, list<int>::iterator st, list<int>::iterator mid, list<int>::iterator e) {
-    list<int> temp;
-    auto i = st, j = mid;
-    
-    while (i != mid && j != e) {
-        if (*i < *j) {
-            temp.push_back(*i);
+void merge(vector<int> &arr, int st, int mid, int e) {
+    vector<int> temp;
+    int i = st;
+    int j = mid + 1;
+    while (i <= mid && j <= e) {
+        if (arr[i] < arr[j]) {
+            temp.push_back(arr[i]);
             i++;
         } else {
-            temp.push_back(*j);
+            temp.push_back(arr[j]);
             j++;
         }
     }
-
-    while (i != mid) {
-        temp.push_back(*i);
+    while (i <= mid) {
+        temp.push_back(arr[i]);
         i++;
     }
-    
-    while (j != e) {
-        temp.push_back(*j);
+    while (j <= e) {
+        temp.push_back(arr[j]);
         j++;
     }
-    
-    for (auto it = temp.begin(); it != temp.end(); ++it) {
-        *st = *it;
-        ++st;
+    for (int i = 0; i < temp.size(); i++) {
+        arr[i + st] = temp[i];
     }
 }
 
-void mergeso(list<int> &arr, list<int>::iterator start, list<int>::iterator end) {
-    if (distance(start, end) > 1) {
-        auto mid = start;
-        advance(mid, distance(start, end) / 2);
-
+void mergeso(vector<int> &arr, int start, int end) {
+    if (start < end) {
+        int mid = start + (end - start) / 2;
         mergeso(arr, start, mid);
-        mergeso(arr, mid, end);
+        mergeso(arr, mid + 1, end);
         merge(arr, start, mid, end);
     }
 }
 
-void print(const list<int> &arr) {
-    for (auto it = arr.begin(); it != arr.end(); ++it) {
-        cout << *it << " ";
+void print(const vector<int> &arr) {
+    for (int i = 0; i < arr.size(); i++) {
+        cout << arr[i] << " ";
     }
     cout << endl;
 }
 
 int main() {
-    list<int> arr = {9, 5, 2, 6, 7, 8};
-    
-    mergeso(arr, arr.begin(), arr.end());
-    
-    cout << "Sorted array: ";
+    vector<int> arr = {9, 5, 2, 6, 7, 8};
+    mergeso(arr, 0, arr.size() - 1);
+    cout<<"Sorted array of the given data list is: ";
     print(arr);
-    
-    auto minElem = *arr.begin();
-    auto maxElem = *arr.rbegin();
-
-    cout << "Minimum element: " << minElem << endl;
-    cout << "Maximum element: " << maxElem << endl;
+    cout<<"The minimum element is: "<<arr[0]<<endl;   
+    cout<<"The maximum element is: "<<arr[arr.size()-1];
 
     return 0;
 }
