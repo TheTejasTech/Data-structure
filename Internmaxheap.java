@@ -42,13 +42,13 @@ class Internmaxheap {
         int maxElement = arr[0];
 
         // 🎉 Internship Offer Announcement
-        System.out.println("🏆 Max element (internship offer goes to): " + maxElement);
-        System.out.println("\n📄 OFFER LETTER");
+        System.out.println(" Max element (internship offer goes to): " + maxElement);
+        System.out.println("\n OFFER LETTER");
         System.out.println("----------------------------");
         System.out.println("Dear Candidate " + maxElement + ",");
         System.out.println("We are thrilled to offer you an internship at HeapTech Solutions!");
         System.out.println("Your outstanding performance at the top of the heap was noticed.");
-        System.out.println("Welcome aboard! 🚀");
+        System.out.println("Welcome aboard! ");
         System.out.println("----------------------------\n");
 
         // Perform heap sort
